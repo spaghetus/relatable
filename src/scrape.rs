@@ -3,15 +3,21 @@ use std::time::Duration;
 use async_std::sync::{Arc, RwLock};
 use scraper::{Html, Selector};
 
+lazy_static::lazy_static! {
+	pub static ref CLIENT: reqwest::Client = {
+		let mut client = reqwest::Client::builder()
+			.timeout(Duration::from_secs(10))
+			.user_agent("Mozilla/5.0 (X11; Linux x86_64; rv:94.0) Gecko/20100101 Firefox/94.0");
+		if let Some(proxy) = std::env::var("RELATABLE_PROXY").ok() {
+			let proxy = reqwest::Proxy::all(proxy).unwrap();
+			client = client.proxy(proxy);
+		}
+		client.build().unwrap()
+	};
+}
+
 pub async fn scrape(target: String, depth: usize, targets: Arc<RwLock<Vec<(String, usize)>>>) {
-	let response = reqwest::Client::builder()
-		.timeout(Duration::from_secs(10))
-		.user_agent("Mozilla/5.0 (X11; Linux x86_64; rv:94.0) Gecko/20100101 Firefox/94.0")
-		.build()
-		.unwrap()
-		.head(&target)
-		.send()
-		.await;
+	let response = CLIENT.head(&target).send().await;
 	// If there is an error
 	if let Err(error) = response {
 		println!("{} !> {}", target, error);
@@ -27,15 +33,7 @@ pub async fn scrape(target: String, depth: usize, targets: Arc<RwLock<Vec<(Strin
 	{
 		println!("{} ~= HTML", target);
 		// Fetch
-		let response = reqwest::Client::builder()
-			.user_agent("Mozilla/5.0 (X11; Linux x86_64; rv:94.0) Gecko/20100101 Firefox/94.0")
-			.timeout(Duration::from_secs(10))
-			.build()
-			.unwrap()
-			.get(&target)
-			.send()
-			.await;
-		// let response = reqwest::get(&target).await;
+		let response = CLIENT.get(&target).send().await;
 		// If there is an error
 		if let Err(error) = response {
 			println!("{} !> {}", target, error);

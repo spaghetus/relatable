@@ -11,6 +11,18 @@ use config::Config;
 
 #[async_std::main]
 async fn main() {
+	if let Some(proxy) = std::env::var("RELATABLE_PROXY").ok() {
+		println!("Waiting for proxy: {}", proxy);
+		while scrape::CLIENT
+			.get("https://example.com")
+			.send()
+			.await
+			.is_err()
+		{
+			eprintln!("Proxy not ready yet, retrying in 1 second");
+			task::sleep(std::time::Duration::from_secs(1)).await;
+		}
+	}
 	eprintln!("Looking for config");
 	let config = read_to_string("./relatable.ron")
 		.await

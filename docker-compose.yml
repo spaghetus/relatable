@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  tor:
+    image: docker.io/dperson/torproxy
+  relatable:
+    build: .
+    init: true
+    depends_on:
+      - tor
+    volumes:
+      - ./relatable.ron:/app/relatable.ron:Z
+    environment:
+      RELATABLE_PROXY: http://tor:8118

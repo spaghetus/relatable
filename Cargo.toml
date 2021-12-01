@@ -12,6 +12,7 @@ async-std = { version = "*", features = ["attributes", "tokio1"] }
 serde = { version = "*", features = ["derive"] }
 ron = "*"
 url = "*"
+lazy_static = "*"
 
 [features]
 default = []

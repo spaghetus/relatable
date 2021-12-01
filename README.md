@@ -2,7 +2,7 @@
 
 Relatable is a web relations scraper. It tries to map out all of the links between websites.
 
-To use relatable, you need to know about **Constraints**. They determine where Relatable will be allowed to crawl.
+To use Relatable, you need to know about **Constraints**. They determine where Relatable will be allowed to crawl. Without Constraints, Relatable would just keep crawling forever until it crawls every page on the internet, which would be very time- and network-intensive.
 
 Available constraints are:
 

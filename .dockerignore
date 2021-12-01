@@ -1,0 +1,7 @@
+/target
+/.*ignore
+/Dockerfile
+/docker-compose.yml
+/LICENSE
+/README.md
+/rustfmt.toml
