@@ -1,0 +1,15 @@
+(
+	entrypoints: [
+		"https://example.com",
+	],
+	constraints: Any([
+		All([
+			Domain("example.com"),
+			Path("/"),
+		]),
+		All([
+			Domain("iana.org"),
+			Path("/domains/reserved"),
+		]),
+	]),
+)
