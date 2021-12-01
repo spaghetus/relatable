@@ -22,16 +22,16 @@ To use Constraints, create a file named `relatable.ron` and open it with your fa
 		"https://example.com",
 	],
 	constraints: All([
-    Any([
-      All([
-        Domain("example.com"),
-        Path("/"),
-      ]),
-      Depth(4),
-    ]),
-    None([
-      Domain("icann.org"),
-    ]),
+		Any([
+			All([
+				Domain("example.com"),
+				Path("/"),
+			]),
+			Depth(4),
+		]),
+		None([
+			Domain("icann.org"),
+		]),
 	]),
 )
 ```
