@@ -27,7 +27,7 @@ pub enum Constraint {
 
 impl Constraint {
 	pub fn test(&self, target: (&String, usize)) -> bool {
-		let url = url::Url::parse(&target.0).unwrap();
+		let url = url::Url::parse(target.0).unwrap();
 		let result = match self {
 			Constraint::Domain(domain) => {
 				url.domain().map(|d| d.ends_with(domain)).unwrap_or(false)

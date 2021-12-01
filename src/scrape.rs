@@ -1,16 +1,9 @@
 use std::time::Duration;
 
-use async_std::channel::Sender;
-use async_std::sync::{Arc, Mutex, RwLock};
-use reqwest::header::HeaderValue;
+use async_std::sync::{Arc, RwLock};
 use scraper::{Html, Selector};
 
-pub async fn scrape(
-	target: String,
-	depth: usize,
-	targets: Arc<RwLock<Vec<(String, usize)>>>,
-	send_new_targets: Sender<()>,
-) {
+pub async fn scrape(target: String, depth: usize, targets: Arc<RwLock<Vec<(String, usize)>>>) {
 	let response = reqwest::Client::builder()
 		.timeout(Duration::from_secs(10))
 		.user_agent("Mozilla/5.0 (X11; Linux x86_64; rv:94.0) Gecko/20100101 Firefox/94.0")
@@ -62,7 +55,7 @@ pub async fn scrape(
 			.unwrap_or(&target);
 		let base = match url::Url::parse(base) {
 			Ok(base) => base,
-			Err(error) => target.parse::<url::Url>().unwrap(),
+			Err(_) => target.parse::<url::Url>().unwrap(),
 		};
 		// Find all URL references
 		let sel = Selector::parse("*").unwrap();
